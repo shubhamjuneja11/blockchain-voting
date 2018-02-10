@@ -14,16 +14,30 @@ class Blockchain {
     });
   }
 
+  onUpdate(cb) {
+    this.onUpdate = cb;
+  }
+
 
   async newEntry(data) {
     let lastBlock = await this.getLastBlock();
     let block = new Block(lastBlock.hash, data);
+    //TODO:  check if voter has already voted
     await this.chain.insert(block);
+    let count = await this.chain.count();
+    if(this.onUpdate) {
+      this.onUpdate(count);
+    }
   }
 
   async getLastBlock() {
     return await this.chain.find().sort({ $natural: -1}).limit(1).next();
   }
+
+  async getCount () {
+    return await this.chain.count();
+  }
+
   validChain(){
    let oldBlock=null;
    let flag=true;
@@ -32,22 +46,21 @@ class Blockchain {
    blocks.forEach(function(block){
      if(oldBlock!=null)
        if(!self.compareHash(block.prevhash,oldBlock.hash)){
-         flag=false;
+	 flag=false;
 
        }
        oldBlock=block;
    });
    return flag;
  }
- resolveChain(){
+  resolveChain(){
 
- }
- compareHash(hash,prevHash){
-   if(hash!=prevHash)
-   return false;
-   else return true;
- }
-
+  }
+  compareHash(hash,prevHash){
+    if(hash!=prevHash)
+      return false;
+    else return true;
+  }
 
 }
 
