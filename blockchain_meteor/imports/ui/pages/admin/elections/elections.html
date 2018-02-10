@@ -1,0 +1,21 @@
+<template name="elections_list">
+  {{#each election in electionList}}
+    {{> elections_list_item election=election}}
+  {{/each}}
+
+  <form id="add-form">
+    Election name:<br>
+    <input type="text" name="elections" id="election_name"><br>
+    Party List:<br>
+    <input type="text" name="partylist" id="party_list">
+    <button type="submit" value="Add">Add</button>
+  </form>
+</template>
+
+
+<template name="elections_list_item">
+  <p>{{election.name}}</p>
+  {{#each party in partyList}}
+    <p>{{party.partyHash}} - {{party.count}}</p>
+  {{/each}}
+</template>

@@ -8,7 +8,7 @@ class Blockchain {
 
     this.chain.find().count().then(count => {
       if(count < 1) {
-	let genesisBlock = new Block(null, {});
+	let genesisBlock = new Block(null, {}, -1);
 	this.chain.insert(genesisBlock);
       }
     });
@@ -17,7 +17,6 @@ class Blockchain {
   onUpdate(cb) {
     this.onUpdate = cb;
   }
-
 
   async newEntry(data) {
     let lastBlock = await this.getLastBlock();
@@ -31,37 +30,47 @@ class Blockchain {
   }
 
   async getLastBlock() {
-    return await this.chain.find().sort({ $natural: -1}).limit(1).next();
+    return await this.chain.find().sort({ $timestamp: -1}).limit(1).next();
+  }
+
+  async getAllData () {
+    return await this.chain.find().toArray();
   }
 
   async getCount () {
     return await this.chain.count();
   }
 
-  validChain(){
-   let oldBlock=null;
-   let flag=true;
-   let blocks = this.chain.find();
-   let self=this;
-   blocks.forEach(function(block){
-     if(oldBlock!=null)
-       if(!self.compareHash(block.prevhash,oldBlock.hash)){
-	 flag=false;
+  async replaceChain(newBlocks) {
+    let count = await this.getCount();
+    if (validateChain(newBlocks) && newBlocks.length > count) {
+      console.log('Received blockchain is valid. Replacing current blockchain with received blockchain');
 
-       }
-       oldBlock=block;
-   });
-   return flag;
- }
-  resolveChain(){
-
-  }
-  compareHash(hash,prevHash){
-    if(hash!=prevHash)
+      this.chain.remove({});
+      let genesisBlock = new Block(null, {}, -1);
+      await this.chain.insert(genesisBlock);
+      for(var i = 0; i < newBlocks.length; i++) {
+	await this.newEntry(newBlocks[i].data);
+      }
+      return true;
+    } else {
+      console.log('Received blockchain invalid');
       return false;
-    else return true;
+    }
   }
-
 }
+
+const validateChain = (chain) => {
+  let genesisBlock = new Block(null, {}, -1);
+  if(JSON.stringify(chain[0]) !== JSON.stringify(genesisBlock)) return false;
+
+  for(var i = 1; i < chain.length; i++) {
+    if(chain[i-1].hash !== chain[i].previousHash) return false;
+    if(!Block.verifyHash(chain[i-1].hash, chain[i].hash, chain[i])) {
+      return false;
+    }
+  }
+  return true;
+};
 
 module.exports = Blockchain;

@@ -1,0 +1,12 @@
+<template name="votes">
+  <form id="add-form">
+    Voter Id:<br>
+    <input type="text" name="voterId" id="voter_id"><br>
+    <select id="party_hash">
+      {{#each party in partyList}}
+	<option value="{{party}}">{{party}}</option>
+      {{/each}}
+    </select>
+    <button type="submit" value="Add">Add</button>
+  </form>
+</template>

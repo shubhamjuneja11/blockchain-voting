@@ -1,0 +1,20 @@
+<template name="peer_list">
+  {{#each peer in peerList}}
+    {{> peer_item peer=peer}}
+  {{/each}}
+
+  <form id="add-form">
+    Peer name:<br>
+    <input type="text" name="peer" id="peer_name"><br>
+    Peer Address:<br>
+    <input type="text" name="address" id="address">
+    <button type="submit" value="Add">Add</button>
+  </form>
+</template>
+
+<template name="peer_item">
+  <div>
+    <p>{{peer.name}} - {{peer.address}} - {{isConnected}}</p>
+    <button name="connect">Connect</button>
+  </div>
+</template>
