@@ -5,6 +5,7 @@ import './fixtures.js';
 import './register-api.js';
 import './accounts.js';
 import { startWebServer } from '../../api/peers/server/connectionmanager.js';
+import './peersconnect.js';
 
 Meteor.startup(() => {
   startWebServer();
