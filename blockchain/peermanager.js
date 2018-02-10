@@ -46,8 +46,15 @@ class PeerManager {
       console.log(`Started websocket server on port : ${process.env.WS_PORT}`);
 
       this.wss.on('connection', async (ws, req) => {
-
-	this.setupConnectionToServer(ws, req.connection.remoteAddress);
+	ws.port = req.connection.remotePort;
+	this.setupConnectionToServer(ws, req.connection.remoteAddress, req.connection.remotePort);
+	let list = _.map(this.peers, (val, key) => {
+	  let split = key.split(':');
+	  return {
+	    address: split[0],
+	    port: split[1]
+	  };
+	});
 
 	let data = { type: 'peerlist', list  };
 	ws.send(JSON.stringify(data));
@@ -73,9 +80,9 @@ class PeerManager {
     });
   }
 
-  async setupConnectionToServer(ws, add) {
+  async setupConnectionToServer(ws, add, port) {
 
-    this.addPeer(ws, add);
+    this.addPeer(ws, add+":"+port);
 
     ws.on('close', () => {
       this.removePeer(ws);
@@ -103,7 +110,7 @@ class PeerManager {
     try {
       let ws = await connectToServer(`ws://${process.env.WS_MAIN}:${process.env.WS_MAIN_PORT}`);
       console.log("Connected to main server");
-      this.setupConnectionToServer(ws, process.env.WS_MAIN);
+      this.setupConnectionToServer(ws, process.env.WS_MAIN, process.env.WS_MAIN_PORT);
     }
     catch(err) {
       console.log(err);
@@ -138,7 +145,7 @@ class PeerManager {
       if(data.count) {
 	ws.count = data.count;
       }
-      this.setupConnectionToServer(ws, data.list[i].address);
+      this.setupConnectionToServer(ws, data.list[i].address, data.list[i].port);
     }
 
   }
