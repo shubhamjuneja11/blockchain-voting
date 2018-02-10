@@ -43,7 +43,7 @@ class PeerManager {
       console.log("We are the main server :grin:");
       return;
     }
-    let ws = await connectToServer(`ws://${process.env.WS_MAIN}`);
+    let ws = await connectToServer(`ws://${process.env.WS_MAIN}:${process.env.WS_MAIN_PORT}`);
     ws.on('open', () => {
       this.addPeer(ws);
     });
@@ -66,8 +66,17 @@ class PeerManager {
 
   }
 
-  connecToPeer() {
+  addPeer(ws) {
+    if(this.peers.hasOwnProperty(ws.address)) {
+      return;
+    }
+    this.peers[ws.address] = ws;
+  }
 
+  removePeer (ws) {
+    if(this.peers.hasOwnProperty(ws.address)) {
+      delete this.peers[ws.address];
+    }
   }
 }
 
