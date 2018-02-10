@@ -1,0 +1,13 @@
+<template name="elections_list">
+  {{#each election in electionList}}
+    {{> elections_list_item election=election}}
+  {{/each}}
+</template>
+
+
+<template name="elections_list_item">
+  <p>{{election.name}}</p>
+  {{#each party in partyList}}
+    <p>{{party.partyHash}} - {{party.count}}</p>
+  {{/each}}
+</template>
