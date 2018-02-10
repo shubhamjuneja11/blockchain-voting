@@ -30,7 +30,7 @@ export const connectToPeer = (peerId) => {
   ddp.subscribe('peer.votes');
 
   votes.find().observe({
-    added: function(document) {
+    added(document) {
       console.log(document);
     }
   });
