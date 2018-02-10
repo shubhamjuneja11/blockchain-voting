@@ -12,15 +12,25 @@ class MongoManager {
     this.db = null;
   }
 
-  connect() {
+  async connect() {
     let self = this;
-    MongoClient.connect(url, function(err, client) {
-      assert.equal(null, err);
-      console.log("Connected successfully to server");
-      self.db = client.db(dbName);
-      // client.close();
+    return await new Promise((resolve, reject) => {
+      MongoClient.connect(url, function(err, client) {
+	assert.equal(null, err);
+	console.log("Connected successfully to server");
+	self.db = client.db(dbName);
+	if(!err) resolve(self.db);
+	else {
+	  reject(err);
+	}
+      });
     });
   }
+
+  startChain(chainName, cb) {
+    return this.db.collection(chainName);
+  }
+
 }
 
 module.exports = new MongoManager();
