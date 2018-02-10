@@ -14,6 +14,7 @@ class Blockchain {
     });
   }
 
+
   async newEntry(data) {
     let lastBlock = await this.getLastBlock();
     let block = new Block(lastBlock.hash, data);
@@ -23,6 +24,30 @@ class Blockchain {
   async getLastBlock() {
     return await this.chain.find().sort({ $natural: -1}).limit(1).next();
   }
+  validChain(){
+   let oldBlock=null;
+   let flag=true;
+   let blocks = this.chain.find();
+   let self=this;
+   blocks.forEach(function(block){
+     if(oldBlock!=null)
+       if(!self.compareHash(block.prevhash,oldBlock.hash)){
+         flag=false;
+
+       }
+       oldBlock=block;
+   });
+   return flag;
+ }
+ resolveChain(){
+
+ }
+ compareHash(hash,prevHash){
+   if(hash!=prevHash)
+   return false;
+   else return true;
+ }
+
 
 }
 

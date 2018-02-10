@@ -22,6 +22,7 @@ class PeerManager {
   constructor() {
     this.wss = null;
     this.peers = {};
+
   }
 
   async connect() {
@@ -51,19 +52,23 @@ class PeerManager {
       this.removePeer(ws);
     });
 
-    ws.on('message', this.handleMessage.bind(this));
+    ws.on('message', (data) => {
+      this.handleMessage(data);
+    });
   }
 
   handleMessage(data) {
-    switch(data.type) {
-    case 'peerlist': this.handlePeerList(data);
-      break;
-    default: () => {};
-    }
+    var info = JSON.parse(data);
+    console.log(info);
+    // switch(info.type) {
+    // case 'peerlist': this.handlePeerList(info);
+    //   break;
+    // default: () => {};
+    // }
   }
 
   async handPeerList(data) {
-
+    console.log(data);
   }
 
   addPeer(ws) {
@@ -78,6 +83,30 @@ class PeerManager {
       delete this.peers[ws.address];
     }
   }
+
+  validChain(){
+  let oldBlock=null;
+  let flag=true;
+  let blocks = this.chain.find();
+  let self=this;
+  blocks.forEach(function(block){
+    if(oldBlock!=null)
+      if(!self.compareHash(block.prevhash,oldBlock.hash)){
+        flag=false;
+
+      }
+      oldBlock=block;
+  });
+  return flag;
+}
+
+compareHash(hash,prevHash){
+  if(hash!=prevHash)
+  return false;
+  else return true;
+}
+
+
 }
 
 
