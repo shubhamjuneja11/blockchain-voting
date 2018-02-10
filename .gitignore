@@ -1,2 +1,3 @@
 node_modules
 /blockchain/package-lock.json
+blockchain/data
