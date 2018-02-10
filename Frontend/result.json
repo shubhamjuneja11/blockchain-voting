@@ -1,0 +1,21 @@
+[
+    {
+        "id": "1",
+        "party": "bjp",
+        "vote": "12000",
+        "totalSeatsWon": "12"
+    },
+    {
+        "id": "2",
+        "party": "congress",
+        "vote": "8000",
+        "totalSeatsWon": "8"
+    },
+    {
+        "id": "1",
+        "party": "sapa",
+        "vote": "5000",
+        "totalSeatsWon": "4"
+    }
+
+]
