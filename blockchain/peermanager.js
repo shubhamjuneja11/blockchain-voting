@@ -55,7 +55,11 @@ class PeerManager {
 	    port: split[1]
 	  };
 	});
-
+	list.push({
+	  address: ip.address(),
+	  port: process.env.WS_PORT,
+	  count
+	});
 	let data = { type: 'peerlist', list  };
 	ws.send(JSON.stringify(data));
       });
