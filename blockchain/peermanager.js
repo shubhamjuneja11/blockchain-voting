@@ -26,26 +26,31 @@ class PeerManager {
   }
 
   async connect() {
-    this.wss = await startWSServer();
-    console.log(`Started websocket server on port : ${process.env.WS_PORT}`);
+    try {
+      this.wss = await startWSServer();
+      console.log(`Started websocket server on port : ${process.env.WS_PORT}`);
 
-    this.wss.on('connection', (ws) => {
-      let peerList = this.wss.clients;
-      let list = [];
-      peerList.forEach(p => {
-	list.push({
-	  address: p._socket.remoteAddress,
-	  port: p._socket.remotePort
+      this.wss.on('connection', (ws) => {
+	let peerList = this.wss.clients;
+	let list = [];
+	peerList.forEach(p => {
+	  list.push({
+	    address: p._socket.remoteAddress,
+	    port: p._socket.remotePort
+	  });
 	});
+
+	let data = { type: 'peerlist', list };
+	ws.send(JSON.stringify(data));
       });
 
-      let data = { type: 'peerlist', list };
-      ws.send(JSON.stringify(data));
-    });
+      this.wss.on('error', () => {});
 
-    this.wss.on('error', () => {});
-
-    await this.connectToMain();
+      await this.connectToMain();
+    }
+    catch(err) {
+      console.log(err);
+    }
   }
 
   async connectToMain() {
@@ -55,20 +60,28 @@ class PeerManager {
       console.log("We are the main server :grin:");
       return;
     }
-    let ws = await connectToServer(`ws://${process.env.WS_MAIN}:${process.env.WS_MAIN_PORT}`);
-    ws.on('open', () => {
-      this.addPeer(ws);
-    });
-    ws.on('close', () => {
-      this.removePeer(ws);
-    });
+    try {
+      let ws = await connectToServer(`ws://${process.env.WS_MAIN}:${process.env.WS_MAIN_PORT}`);
+      ws.on('open', () => {
+	this.addPeer(ws);
+      });
+      ws.on('close', () => {
+	this.removePeer(ws);
+      });
 
-    ws.on('error', () => {});
+      ws.on('error', () => {});
 
-    ws.on('message', this.handleMessage.bind(this));
-    ws.on('message', (data) => {
-      this.handleMessage(data);
-    });
+      ws.on('message', this.handleMessage.bind(this));
+      ws.on('message', (data) => {
+	this.handleMessage(data);
+      });
+    }
+    catch(err) {
+      console.log(err);
+      setTimeout(async () => {
+	await this.connectToMain();
+      }, 5000) ;
+    }
 
   }
 
