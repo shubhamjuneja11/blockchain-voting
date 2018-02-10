@@ -6,9 +6,9 @@ import crypto from 'crypto';
 Meteor.methods({
   'votes.add'({ voterSimpleHash, partyName, electionId }) {
     let timestamp = Date.now();
-
+    let election = Elections.findOne(electionId);
     if(Votes.find({ electionId }).count() < 1) {
-      Votes.insert(getVote(null, {}, -1, electionId));
+      Votes.insert(getVote(null, {}, -1, electionId, election.name));
     }
 
     let vote = Votes.find({ electionId }, {
@@ -16,8 +16,7 @@ Meteor.methods({
       limit: 1
     }).fetch();
 
-    let { previousHash } = vote[0];
-    let election = Elections.findOne(electionId);
+    let { hash } = vote[0];
     let partyHash = crypto.createHash('SHA256').update(election.timestamp + partyName).digest('hex');
     let voterHash = crypto.createHash('SHA256').update(voterSimpleHash + election.timestamp).digest('hex');
 
@@ -28,7 +27,7 @@ Meteor.methods({
       throw new Meteor.Error("Already voted");
     }
 
-    Votes.insert(getVote(previousHash, { voterHash, partyHash }, Date.now(), electionId ));
+    Votes.insert(getVote(hash, { voterHash, partyHash }, Date.now(), electionId , election.name ));
 
     // TODO: BROADCAST TO PEERS
   },
@@ -49,12 +48,13 @@ Meteor.methods({
 });
 
 
-const getVote = (previousHash, data, timestamp, electionId) => {
+const getVote = (previousHash, data, timestamp, electionId, electionName) => {
   let vote = {
     previousHash,
     data,
     timestamp,
     electionId,
+    electionName,
     hash: getHash({ previousHash, data, timestamp, electionId })
   };
   return vote;

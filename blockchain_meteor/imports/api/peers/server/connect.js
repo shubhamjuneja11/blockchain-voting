@@ -2,6 +2,10 @@ import { DDP } from 'meteor/ddp-client';
 import { Peers } from '../peers.js';
 import { Tracker } from 'meteor/tracker'
 import { Mongo } from 'meteor/mongo';
+import { Votes } from '../../voting/votes.js';
+import { Elections } from '../../elections/elections.js';
+import crypto from 'crypto';
+
 const connections = [];
 
 export const connectToPeer = (peerId) => {
@@ -31,7 +35,9 @@ export const connectToPeer = (peerId) => {
 
   votes.find().observe({
     added(document) {
-      console.log(document);
+      if(checkVote(document)) {
+	Votes.insert(document);
+      }
     }
   });
 
@@ -39,4 +45,19 @@ export const connectToPeer = (peerId) => {
     let status = ddp.status();
     connected = status.connected;
   });
+};
+
+const checkVote = (vote) => {
+
+  if(Votes.find({ hash: vote.hash })) return false;
+
+  let lastVote = Votes.find({ electionId: vote.electionId }, {
+    sort: { timestamp: -1 },
+    limit: 1
+  }).fetch();
+
+  let { hash } = lastVote[0];
+  let currentHash = crypto.createHash('SHA256').update(vote.electionId + vote.timestamp + JSON.stringify(vote.data) + hash).digest('hex');
+
+  return currentHash === vote.hash;
 };
