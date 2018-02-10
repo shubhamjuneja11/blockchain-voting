@@ -14,13 +14,14 @@ class Blockchain {
     });
   }
 
-  newEntry(data) {
-    let lastBlock = this.getLastBlock();
-    console.log(lastBlock);
+  async newEntry(data) {
+    let lastBlock = await this.getLastBlock();
+    let block = new Block(lastBlock.hash, data);
+    await this.chain.insert(block);
   }
 
-  getLastBlock() {
-    return this.chain.findOne().then(l => console.log(l));
+  async getLastBlock() {
+    return await this.chain.find().sort({ $natural: -1}).limit(1).next();
   }
 
 }

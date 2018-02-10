@@ -11,6 +11,7 @@ mongomanager.connect()
   });
 
 
-setTimeout(() => {
-  electionChain.newEntry();
+setTimeout(async () => {
+  await electionChain.newEntry({ voterId: 'adf', partyId: 'addf'});
+  await electionChain.newEntry({ voterId: 'adfd', partyId: 'npa'});
 }, 2000);
