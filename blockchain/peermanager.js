@@ -30,8 +30,19 @@ class PeerManager {
 
     this.wss.on('connection', (ws) => {
       let peerList = this.wss.clients;
-      console.log(peerList);
+      let list = [];
+      peerList.forEach(p => {
+	list.push({
+	  address: p._socket.remoteAddress,
+	  port: p._socket.remotePort
+	});
+      });
+
+      let data = { type: 'peerlist', list };
+      ws.send(JSON.stringify(data));
     });
+
+    this.wss.on('error', () => {});
 
     await this.connectToMain();
   }
@@ -50,6 +61,8 @@ class PeerManager {
     ws.on('close', () => {
       this.removePeer(ws);
     });
+
+    ws.on('error', () => {});
 
     ws.on('message', this.handleMessage.bind(this));
   }
