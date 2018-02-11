@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    <script src="libs/angular.min.js"></script>
+    <script src="app.js"></script>
+    <script src="factory.js"></script>
+    <script src="controller.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+
+<body ng-app="mymodule" style="text-align: center;">
+
+
+    <div ng-controller="electionsCtr">
+
+        <h1 style="margin: 30px;color: #cc5555">{{electionHeading}}</h1>
+        
+        <div>
+
+        </div>
+
+        <button ng-click="findnow()" class="btn btn-primary" style="margin-bottom:30px"> Load Elections List</button>
+        
+        
+        
+        
+         <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Party Name</th>
+                    <th scope="col">View Result</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="election in result|filter:criteria">
+                    <td scope="col">{{election.id}}</td>
+                    <td scope="col">{{election.name}}</td>
+                    <td scope="col"><button ng-click="viewResult(election.id)" class="btn btn-secondary" style="width: 100px">Go</button></td>
+<!--                    <th scope="col">{{finalResult.totalSeatsWon}}</th>-->
+                </tr>
+            </tbody>
+        </table>
+        
+        
+<div> Results List</div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Party Name</th>
+                    <th scope="col">Total Votes</th>
+                    <th scope="col">TOTAL SEATS WON</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="result in finalResult">
+                    <td scope="col">{{finalResult.id}}</td>
+                    <td scope="col">{{finalResult.party}}</td>
+                    <td scope="col">{{finalResult.vote}}</td>
+                    <td scope="col">{{finalResult.totalSeatsWon}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <!--
+        <ul>
+            <li ng-repeat="result in finalResult">
+                
+                {{finalResult.party}} {{finalResult.vote}} {{finalResult.totalSeatsWon}}
+            </li>
+            {{finalResult}}
+
+        </ul>
+        -->
+
+
+
+    </div>
+
+</body>
+
+</html>
