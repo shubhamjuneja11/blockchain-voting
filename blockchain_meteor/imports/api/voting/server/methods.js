@@ -37,7 +37,7 @@ Meteor.methods({
 
     Votes.insert(getVote(hash, { voterHash, partyHash }, Date.now(), electionId , election.name ));
 
-    // TODO: BROADCAST TO PEERS
+    return true;
   },
 
   'get.votes.election'(electionId) {

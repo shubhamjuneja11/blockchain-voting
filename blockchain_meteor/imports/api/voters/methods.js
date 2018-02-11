@@ -26,7 +26,7 @@ Meteor.methods({
   'voter.get.token'(voterId) {
 
     let date = new Date();
-    let finalDate = new Date(date.getTime() + (1*60000));
+    let finalDate = new Date(date.getTime() + (5*60000));
 
     Voters.update({
       voterId

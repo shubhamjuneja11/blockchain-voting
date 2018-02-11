@@ -38,6 +38,11 @@ Template.votes.events({
       voterToken,
       partyName,
       electionId
+    }, (err, res) => {
+      if(!err) {
+	template.$('.modal').modal('show');
+	template.$('form')[0].reset();
+      }
     });
   }
 });

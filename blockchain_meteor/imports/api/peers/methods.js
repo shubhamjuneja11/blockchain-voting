@@ -19,6 +19,15 @@ Meteor.methods({
     return peerId;
   },
 
+  'peers.remove'(peerId) {
+    console.log(peerId);
+    Peers.update(peerId, {
+      $set: {
+	deleteOnStart: true
+      }
+    });
+  },
+
   'peers.connect'(peerId) {
 
     if(Meteor.isServer) {

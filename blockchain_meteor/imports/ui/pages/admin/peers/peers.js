@@ -36,3 +36,14 @@ Template.peer_item.helpers({
     return this.peer.status === true ? "Connected" : "Offline";
   }
 });
+
+Template.peer_item.events({
+  'click #connect'(event, template) {
+    Meteor.call('peers.connect', template.data.peer._id);
+  },
+
+  'click #remove'(event, template) {
+    console.log(template.data.peer);
+    Meteor.call('peers.remove', template.data.peer._id);
+  }
+});
