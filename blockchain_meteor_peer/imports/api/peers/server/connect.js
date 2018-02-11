@@ -48,6 +48,7 @@ export const connectToPeer = (peerId) => {
 };
 
 const checkVote = (vote) => {
+  console.log(vote);
   if(Votes.findOne({ hash: vote.hash })) return false;
 
   let lastVote = Votes.find({ electionId: vote.electionId }, {
