@@ -6,7 +6,7 @@ Meteor.publish('elections.all', function () {
   let userId = this.userId;
   let user = Meteor.users.findOne(userId);
   if(user.profile.admin) {
-    return Elections.find();
+    return [Elections.find(), Parties.find()];
   }
 
   return null;

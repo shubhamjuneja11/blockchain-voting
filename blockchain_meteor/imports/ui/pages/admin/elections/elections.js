@@ -1,9 +1,11 @@
 import './elections.html';
 import { Template } from 'meteor/templating';
 import { Elections } from '../../../../api/elections/elections.js';
+import { Parties } from '../../../../api/parties/parties.js';
 import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/kadira:flow-router';
 import { ReactiveVar } from 'meteor/reactive-var';
+import SHA256 from "crypto-js/sha256";
 
 Template.elections_list.onRendered(function() {
   this.subscribe('elections.all');
@@ -43,6 +45,9 @@ Template.elections_list_item.onCreated(function() {
 Template.elections_list_item.onRendered(function() {
   Meteor.call('get.votes.election', this.data.election._id, (err, res) => {
     if(!err) {
+      res.forEach(f => {
+	f.electionId = this.data.election._id;
+      });
       this.electionResult.set(res);
     }
   });
@@ -52,6 +57,25 @@ Template.elections_list_item.helpers({
   partyList() {
     let result = Template.instance().electionResult.get();
     return result ? result : [];
+  }
+});
+
+Template.party_item.helpers({
+  partyName() {
+    let partyHash = this.party.partyHash;
+    let election = Elections.findOne(this.party.electionId);
+    let parties = Parties.find({ electionId: election._id }).fetch();
+    for(var i = 0; i < parties.length; i++) {
+      let partyNames = parties[i].partyList;
+      for(var j = 0; j < partyNames.length; j++) {
+	let name = partyNames[j];
+	let hash = SHA256(election.timestamp+name).toString();
+	if(hash === partyHash) {
+	  return name;
+	}
+      }
+    }
+    return "";
   }
 });
 

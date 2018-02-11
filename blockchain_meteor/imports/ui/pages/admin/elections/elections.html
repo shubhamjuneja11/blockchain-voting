@@ -43,10 +43,15 @@
   </div>
   <div class="row">
     {{#each party in partyList}}
-      <div class="col-sm-3">
-	<img src="https://robohash.org/{{party.partyHash}}" alt="{{party.partyHash}}" class="img-thumbnail" style="padding: 30px; background-color: #f3ffbd">
-	<p style="text-align:center;">{{party.count}}</p>
-      </div>
+      {{> party_item party=party}}
     {{/each}}
+  </div>
+</template>
+
+<template name="party_item">
+  <div class="col-sm-3">
+    <img src="https://robohash.org/{{party.partyHash}}" alt="{{party.partyHash}}" class="img-thumbnail" style="padding: 30px; background-color: #f3ffbd">
+    <p style="text-align: center">{{partyName}}</p>
+    <p style="text-align:center;">{{party.count}}</p>
   </div>
 </template>
