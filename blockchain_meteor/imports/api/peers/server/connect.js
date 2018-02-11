@@ -51,12 +51,14 @@ const checkVote = (vote) => {
   // console.log(vote);
   if(Votes.findOne({ hash: vote.hash })) return false;
 
-
+  // console.log(Votes.find({ electionId: vote.electionId}).fetch());
   let lastVote = Votes.findOne({ electionId: vote.electionId }, {
-    sort: { timestamp: 1 }
+    sort: { timestamp: -1 }
   });
 
-  let { hash } = lastVote[0];
+  console.log(lastVote);
+
+  let { hash } = lastVote;
   let currentHash = crypto.createHash('SHA256').update(vote.electionId + vote.timestamp + JSON.stringify(vote.data) + hash).digest('hex');
 
   console.log(currentHash === vote.hash);
