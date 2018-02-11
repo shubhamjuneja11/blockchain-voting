@@ -48,7 +48,7 @@ export const connectToPeer = (peerId) => {
 };
 
 const checkVote = (vote) => {
-  // console.log(vote);
+  console.log(vote);
   if(Votes.findOne({ hash: vote.hash })) return false;
 
   // console.log(Votes.find({ electionId: vote.electionId}).fetch());
@@ -56,7 +56,7 @@ const checkVote = (vote) => {
     sort: { timestamp: -1 }
   });
 
-  console.log(lastVote);
+  if(vote.timestamp === -1) return false;
 
   let { hash } = lastVote;
   let currentHash = crypto.createHash('SHA256').update(vote.electionId + vote.timestamp + JSON.stringify(vote.data) + hash).digest('hex');

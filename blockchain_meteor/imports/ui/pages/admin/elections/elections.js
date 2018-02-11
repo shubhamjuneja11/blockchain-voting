@@ -43,14 +43,18 @@ Template.elections_list_item.onCreated(function() {
 });
 
 Template.elections_list_item.onRendered(function() {
-  Meteor.call('get.votes.election', this.data.election._id, (err, res) => {
-    if(!err) {
-      res.forEach(f => {
-	f.electionId = this.data.election._id;
-      });
-      this.electionResult.set(res);
-    }
-  });
+  let fn = () => {
+    Meteor.call('get.votes.election', this.data.election._id, (err, res) => {
+      if(!err) {
+	res.forEach(f => {
+	  f.electionId = this.data.election._id;
+	});
+	this.electionResult.set(res);
+      }
+    });
+  }
+  fn();
+  setInterval(fn, 5000);
 });
 
 Template.elections_list_item.helpers({

@@ -5,7 +5,7 @@ import { Parties } from '../../parties/parties.js';
 Meteor.publish('elections.all', function () {
   let userId = this.userId;
   let user = Meteor.users.findOne(userId);
-  if(user.profile.admin) {
+  if(user && user.profile.admin) {
     return [Elections.find(), Parties.find()];
   }
 
