@@ -15,10 +15,6 @@ Meteor.methods({
 
     if(!voter || voter.validTill < timestamp) throw new Meteor.Error("Timed out");
 
-    if(Votes.find({ electionId }).count() < 1) {
-      Votes.insert(getVote(null, {}, -1, electionId, election.name));
-    }
-
     let vote = Votes.find({ electionId }, {
       sort: { timestamp: -1 },
       limit: 1
