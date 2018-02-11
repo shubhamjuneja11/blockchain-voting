@@ -1,3 +1,28 @@
 <template name="App_body">
-  {{> Template.dynamic template=main}}
+  <div class="container">
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container-fluid">
+	<div class="navbar-header">
+	  <a class="navbar-brand" href="#">
+	    <img alt="Admin" src="...">
+	  </a>
+	</div>
+	<ul class="nav navbar-nav navbar-right">
+	  <li>
+	    <a class="navbar-brand" href="/admin/voters/">
+	      <img alt="Voter List" src="...">
+	    </a>
+	  </li>
+	  <li>
+	    <a class="navbar-brand" href="/admin/elections/">
+	      <img alt="Election List" src="...">
+	    </a>
+	  </li>
+	</ul>
+      </div>
+    </nav>
+    <div style="padding-top: 50px">
+      {{> Template.dynamic template=main}}
+    </div>
+  </div>
 </template>

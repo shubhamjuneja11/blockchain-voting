@@ -1,0 +1,22 @@
+html, body {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#70c1b3+0,b2dbbf+100 */
+    background: #70c1b3; /* Old browsers */
+    background: -moz-linear-gradient(top, #70c1b3 0%, #b2dbbf 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #70c1b3 0%,#b2dbbf 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #70c1b3 0%,#b2dbbf 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#70c1b3', endColorstr='#b2dbbf',GradientType=0 ); /* IE6-9 */
+}
+
+.center-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.row-item {
+    margin: 20px;
+}

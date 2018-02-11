@@ -1,12 +1,40 @@
 <template name="votes">
-  <form id="add-form">
-    Voter Id:<br>
-    <input type="text" name="voterId" id="voter_id"><br>
-    <select id="party_hash">
-      {{#each party in partyList}}
-	<option value="{{party}}">{{party}}</option>
-      {{/each}}
-    </select>
-    <button type="submit" value="Add">Add</button>
-  </form>
+  <div class="container-fluid center-item">
+    <div style="flex: 1" class="center-item">
+      <div style="height: 300px; width: 30%;" class="center-item">
+	<form id="add-form" class="container" style="text-align: center">
+	  <div class="row row-item">
+	    <div class="col-12">
+	      Voter ID
+	    </div>
+	  </div>
+	  <div class="row row-item">
+	    <div class="col-12">
+	      <input type="text" name="voterId" id="voter_id">
+	    </div>
+	  </div>
+	  <div class="row row-item">
+	    <div class="col-12">
+	      Voter Token
+	    </div>
+	  </div>
+	  <div class="row row-item">
+	    <div class="col-12">
+	      <input type="text" name="voterToken" id="voter_token">
+	    </div>
+	  </div>
+	  <select id="party_hash" class="form-control">
+	    {{#each party in partyList}}
+	      <option value="{{party}}">{{party}}</option>
+	    {{/each}}
+	  </select>
+	  <div class="row row-item">
+	    <div class="col-12">
+	      <button type="submit" value="Submit Vote">Submit</button>
+	    </div>
+	  </div>
+	</form>
+      </div>
+    </div>
+  </div>
 </template>

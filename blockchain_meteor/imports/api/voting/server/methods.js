@@ -2,11 +2,19 @@ import { Meteor } from 'meteor/meteor';
 import { Votes } from '../votes.js';
 import { Elections } from '../../elections/elections.js';
 import crypto from 'crypto';
+import { Voters } from '../../voters/voters.js';
 
 Meteor.methods({
-  'votes.add'({ voterSimpleHash, partyName, electionId }) {
+  'votes.add'({ voterSimpleHash, partyName, electionId, voterToken }) {
     let timestamp = Date.now();
     let election = Elections.findOne(electionId);
+
+    let voter = Voters.findOne({ token: voterToken });
+
+    console.log(voter, voterToken);
+
+    if(!voter || voter.validTill < timestamp) throw new Meteor.Error("Timed out");
+
     if(Votes.find({ electionId }).count() < 1) {
       Votes.insert(getVote(null, {}, -1, electionId, election.name));
     }

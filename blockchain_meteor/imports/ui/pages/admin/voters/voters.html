@@ -1,0 +1,29 @@
+<template name="valid_voters">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 center">
+	<h3>Approved Voter List</h3>
+      </div>
+    </div>
+    <div class="row">
+      <table class="table">
+	<tr>
+	  <th>Voter Name</th>
+	  <th>Voter ID</th>
+	  <th>Voter Token</th>
+	</tr>
+	{{#each voter in voterList}}
+	  {{> voter_list_item voter=voter}}
+	{{/each}}
+      </table>
+    </div>
+  </div>
+</template>
+
+<template name="voter_list_item">
+  <tr>
+    <td>{{voter.voterName}}</td>
+    <td>{{voter.voterId}}</td>
+    <td>{{voter.token}}</td>
+  </tr>
+</template>

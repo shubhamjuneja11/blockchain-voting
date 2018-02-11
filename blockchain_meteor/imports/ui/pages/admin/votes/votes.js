@@ -22,6 +22,7 @@ Template.votes.events({
   'submit #add-form'(event, template) {
     event.preventDefault();
     let voterId = template.$('#voter_id').val();
+    let voterToken = template.$('#voter_token').val();
     let partyName = template.$('#party_hash').val();
     let electionId = FlowRouter.getParam('electionId');
 
@@ -34,6 +35,7 @@ Template.votes.events({
     let voterSimpleHash = SHA256(voterId).toString();
     Meteor.call('votes.add', {
       voterSimpleHash,
+      voterToken,
       partyName,
       electionId
     });

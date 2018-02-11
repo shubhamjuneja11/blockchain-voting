@@ -22,12 +22,16 @@ Template.elections_list.events({
     event.preventDefault();
     let name = template.$('#election_name').val();
     let parties = template.$('#party_list').val();
+    let timestamp = template.$('#election_time').val();
     if(name === '' || parties.split(',').length < 1) {
       console.log("INVALID DATA");
     }
     Meteor.call('elections.add', {
       name,
-      parties
+      parties,
+      timestamp
+    }, (err, res) => {
+      template.$('.modal').modal('show');
     });
   }
 });

@@ -1,0 +1,12 @@
+<template name="all_voters">
+  <form id="add-form">
+    Voter name:<br>
+    <input type="text" name="elections" id="voter_name"><br>
+    Voter Id:<br>
+    <input type="text" name="partylist" id="voter_id"><br>
+    <button type="submit" value="Add">Add</button>
+  </form>
+  {{#each voter in voterList}}
+    {{> voter_list_item voter=voter}}
+  {{/each}}
+</template>
