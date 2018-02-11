@@ -1,13 +1,43 @@
 <template name="elections_list">
-  {{#each election in electionList}}
-    {{> elections_list_item election=election}}
-  {{/each}}
+  <div class="container-fluid">
+    {{#each election in electionList}}
+      {{> elections_list_item election=election}}
+    {{/each}}
+  </div>
+  <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+	<div class="modal-body">
+	  <p>Added election</p>
+	</div>
+	<div class="modal-footer">
+	  <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+	</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 
 <template name="elections_list_item">
-  <p>{{election.name}}</p>
-  {{#each party in partyList}}
-    <p>{{party.partyHash}} - {{party.count}}</p>
-  {{/each}}
+  <div class="row">
+    <div class="col-sm-12">
+      <h3>
+	Election Name - {{election.name}}
+      </h3>
+    </div>
+  </div>
+  <div class="row">
+    {{#each party in partyList}}
+      {{> party_item party=party}}
+    {{/each}}
+  </div>
+</template>
+
+<template name="party_item">
+  <div class="col-sm-3">
+    <img src="https://robohash.org/{{party.partyHash}}" alt="{{party.partyHash}}" class="img-thumbnail" style="padding: 30px; background-color: #f3ffbd">
+    <p style="text-align: center">{{partyName}}</p>
+    <p style="text-align:center;">{{party.count}}</p>
+  </div>
 </template>

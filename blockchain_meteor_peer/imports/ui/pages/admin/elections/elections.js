@@ -9,11 +9,15 @@ Template.elections_list.onCreated(function() {
 });
 
 Template.elections_list.onRendered(function() {
-  Meteor.call('get.votes.election', (err, res) => {
-    if(!err) {
-      this.electionResult.set(res);
-    }
-  });
+  let fn = () => {
+    Meteor.call('get.votes.election', (err, res) => {
+      if(!err) {
+	this.electionResult.set(res);
+      }
+    });
+  };
+  fn();
+  setInterval(fn, 5000);
 });
 
 
@@ -21,7 +25,6 @@ Template.elections_list.helpers({
 
   electionList() {
     let res =  Template.instance().electionResult.get();
-    console.log(res);
     return res ? res : [];
     // return Elections.find();
   }
@@ -32,11 +35,5 @@ Template.elections_list_item.helpers({
   partyList() {
 
     return this.election.partyVotes;
-  }
-});
-
-Template.elections_list_item.events({
-  'click' (event, template) {
-    FlowRouter.go('App.admin.voting', { electionId: template.data.election._id});
   }
 });
